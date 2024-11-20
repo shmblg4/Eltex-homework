@@ -20,9 +20,12 @@ void init_Abonents(Abonent *array)
     }
 }
 
-void print_struct(Abonent *elem)
+void print_struct(Abonent *elem, int index)
 {
-    printf("%s%s%s", elem->name, elem->second_name, elem->tel);
+    printf("n: %d\n", index + 1);
+    printf("%s\n", elem->name);
+    printf("%s\n", elem->second_name);
+    printf("%s\n\n", elem->tel);
 }
 
 int is_empty(Abonent *elem)
@@ -68,12 +71,7 @@ void findbyname(Abonent *array)
     for (int index = 0; index < MAX_ELEMS; index++)
     {
         if (!strcmp((array + index)->name, name))
-        {
-            printf("n: %d\n", index + 1);
-            printf("%s\n", (array + index)->name);
-            printf("%s\n", (array + index)->second_name);
-            printf("%s\n\n", (array + index)->tel);
-        }
+            print_struct((array + index), index);
         else
             continue;
     }
@@ -85,12 +83,7 @@ void printall(Abonent *array)
     while (index < 100)
     {
         if (!is_empty(array + index))
-        {
-            printf("n: %d\n", index + 1);
-            printf("%s\n", (array + index)->name);
-            printf("%s\n", (array + index)->second_name);
-            printf("%s\n\n", (array + index)->tel);
-        }
+            print_struct((array + index), index);
         index++;
     }
 }
@@ -133,7 +126,6 @@ int main()
 {
     Abonent array[MAX_ELEMS];
     init_Abonents(&array[0]);
-    while (!work_with_data(&array[0]))
-        ;
+    while (!work_with_data(&array[0]));
     return 0;
 }
