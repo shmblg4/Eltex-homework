@@ -5,19 +5,14 @@
 
 typedef struct abonent
 {
-    char name[10];
-    char second_name[10];
-    char tel[10];
+    char name[20]; // Увеличен размер с 10 на 20 для кириллицы
+    char second_name[20];
+    char tel[15];
 } Abonent;
 
 void init_Abonents(Abonent *array)
 {
-    for (int index = 0; index < MAX_ELEMS; index++)
-    {
-        *(array + index)->name = 0;
-        *(array + index)->second_name = 0;
-        *(array + index)->tel = 0;
-    }
+    memset(array, 0, sizeof(Abonent) * MAX_ELEMS);
 }
 
 void print_struct(Abonent *elem, int index)
@@ -35,14 +30,16 @@ int is_empty(Abonent *elem)
 
 void adduser(Abonent *array)
 {
+    printf("Введите имя, фамилию и номер телефона\n");
+    printf("Пример: Иван Иванов 1234567890\n");
     for (int index = 0; index < MAX_ELEMS; index++)
     {
         if (is_empty(array + index))
         {
-            scanf("%s", (array + index)->name);
-            scanf("%s", (array + index)->second_name);
-            scanf("%s", (array + index)->tel);
-            printf("Add {%s %s %s} on %d pos.\n", (array + index)->name, (array + index)->second_name, (array + index)->tel, index);
+            scanf("%s", array[index].name);
+            scanf("%s", array[index].second_name);
+            scanf("%s", array[index].tel);
+            printf("Add {%s %s %s} on %d pos.\n", array[index].name, array[index].second_name, array[index].tel, index);
             return;
         }
     }
@@ -52,45 +49,41 @@ int deluser(Abonent *array)
 {
     int index;
     scanf("%d", &index);
-    if (index < 0 || index > 99)
+    if (index < 0 || index >= MAX_ELEMS)
     {
-        printf("Введите верный номер записи от 0 до 99\n");
+        printf("Введите верный номер записи от 0 до %d\n", MAX_ELEMS - 1);
         return 1;
     }
-    *(array + index)->name = 0;
-    *(array + index)->second_name = 0;
-    *(array + index)->tel = 0;
+    memset(&array[index], 0, sizeof(Abonent));
     return 0;
 }
 
 void findbyname(Abonent *array)
 {
     char name[50] = {0};
-    scanf("%s", &name[0]);
+    scanf("%s", name);
     printf("Найденные записи:\n");
     for (int index = 0; index < MAX_ELEMS; index++)
     {
-        if (!strcmp((array + index)->name, name))
-            print_struct((array + index), index);
-        else
-            continue;
+        if (strcmp(array[index].name, name) == 0)
+        {
+            print_struct(&array[index], index);
+        }
     }
 }
 
 void printall(Abonent *array)
 {
-    int index = 0;
-    while (index < 100)
+    for (int index = 0; index < MAX_ELEMS; index++)
     {
-        if (!is_empty(array + index))
-            print_struct((array + index), index);
-        index++;
+        if (!is_empty(&array[index]))
+            print_struct(&array[index], index);
     }
 }
 
 int work_with_data(Abonent *array)
 {
-    int input = 5;
+    int input;
     printf("1) Добавить абонента\n"
            "2) Удалить абонента\n"
            "3) Поиск абонентов по имени\n"
@@ -113,11 +106,9 @@ int work_with_data(Abonent *array)
         break;
     case 5:
         return 1;
-        break;
-
     default:
-        return 1;
-        break;
+        printf("Неверный ввод. Пожалуйста, попробуйте снова.\n");
+        return 0;
     }
     return 0;
 }
@@ -125,7 +116,8 @@ int work_with_data(Abonent *array)
 int main()
 {
     Abonent array[MAX_ELEMS];
-    init_Abonents(&array[0]);
-    while (!work_with_data(&array[0]));
+    init_Abonents(array);
+    while (!work_with_data(array))
+        ;
     return 0;
 }
