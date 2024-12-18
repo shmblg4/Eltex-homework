@@ -48,13 +48,14 @@ void adduser(Abonent *array)
 int deluser(Abonent *array)
 {
     int index;
+    printf("Введите номер записи от 1 до %d\n", MAX_ELEMS);
     scanf("%d", &index);
     if (index < 0 || index >= MAX_ELEMS)
     {
-        printf("Введите верный номер записи от 0 до %d\n", MAX_ELEMS - 1);
+        printf("Введите верный номер записи от 1 до %d\n", MAX_ELEMS);
         return 1;
     }
-    memset(&array[index], 0, sizeof(Abonent));
+    memset(&array[index - 1], 0, sizeof(Abonent));
     return 0;
 }
 
@@ -74,10 +75,18 @@ void findbyname(Abonent *array)
 
 void printall(Abonent *array)
 {
+    int fl = 0;
     for (int index = 0; index < MAX_ELEMS; index++)
     {
         if (!is_empty(&array[index]))
+        {
+            fl = 1;
             print_struct(&array[index], index);
+        }
+    }
+    if (!fl)
+    {
+        printf("Справочник пуст\n");
     }
 }
 
